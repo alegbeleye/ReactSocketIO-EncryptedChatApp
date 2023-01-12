@@ -1,0 +1,82 @@
+.chat-room{
+    background-color: white;
+    height: 100%;
+}
+
+.side-nav{
+    z-index: 1;
+    position: fixed;
+    left: 0;
+    top:0;
+    height: 100%;
+    width: 20%;
+    background-color: #820000;
+    color: white;
+    text-align: center;
+}
+
+.userList{
+    font-size: medium;
+    padding: 12px;
+    background-color: #820000;
+}
+
+.userList:hover{
+    font-size: medium;
+    padding: 12px;
+    background-color: #720202;
+}
+
+.message-section{
+    top: 0;
+    left: 20%;
+    right: 0;
+    height:100%;
+    background-color: white;
+    padding: 20px;
+    position: fixed;
+}
+
+.message-box{
+    background-color: #820000;
+    color: white;
+    padding: 12px;
+    width: fit-content;
+    border-radius: 10px;
+}
+
+.message-input{
+    bottom: 0;
+    position: fixed;
+    width: 65vw;
+    padding: 20px;
+    border: none;
+    margin-bottom: 10px;
+    font-size: larger;
+    border-bottom: #820000 2px solid;
+}
+
+.message-input:focus{
+    outline: none;
+}
+
+.message-button{
+    right: 0;
+    width: 15vh;
+    border: none;
+    padding: 20px;
+    bottom: 0;
+    position: fixed;
+    margin-bottom: 15px;
+    margin-right: 10px;
+    border-radius: 30px;
+    background-color: #820000;
+    color: white;
+}
+
+.message-button:hover{
+    background-color: white;
+    color: #820000;
+    font-weight: bold;
+    border: #820000 2px solid;
+}
