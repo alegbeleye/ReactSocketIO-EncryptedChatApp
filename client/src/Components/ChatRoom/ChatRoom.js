@@ -5,30 +5,25 @@ import io from 'socket.io-client';
 
 import { encode, decode } from "../../utils/cryptography"
 
-function ChatRoom({ username }) {
+function ChatRoom({ username, decryptionKey }) {
 
     const serverURL = "http://localhost:4000";
     const socket = io.connect("http://localhost:3001");
 
     const [isConnected, setIsConnected] = useState(socket.connected);
-
-    const [key, setKey] = useState('12345');
     const [messageValue, setMessageValue] = useState('')
     const [messages, setMessages] = useState([{ name: username, message: "this is a temporary message" }])
-    const [rooms, setRooms] = useState(['jesse', 'Stella', 'Lanre']);
+    const [rooms, setRooms] = useState(['room1', 'room2', 'room3']);
     const [currentRoom, setCurrentRoom] = useState(null);
     const [timer, setTimer] = useState(60)
 
 
     useEffect(() => {
         timer > 0 && setTimeout(() => setTimer(timer - 1), 1000)
-        socket.on('joinRoomServer', () => {
-            setMessages([]);
-        })
 
         socket.on('serverMessage', (value) => {
             let msg = value.message;
-            if (value.name != username) {
+            if (value.name !== username) {
                 msg = encode(msg)
             }
             setMessages((messages) => [...messages, { name: value.name, message: msg }]);
@@ -42,23 +37,17 @@ function ChatRoom({ username }) {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        if (currentRoom !== null) {
+        if (currentRoom) {
             socket.emit('clientMessage', { name: username, message: messageValue, room: currentRoom });
+            setTimer(60)
         }
-        setTimer(60)
-
     }
-
-    const handleTimer = () => {
-        setTimer(60)
-    }
-
 
     const verify = (index) => {
         const query = prompt('Enter a key to decrypt message: ')
-        if (query === key) {
+        if (query === decryptionKey && timer !== 0) {
             alert("Decryption Success");
-            const decoded = decode(messages[index].message)
+            const decoded = decode(messages[index].message, timer)
             const newMsgs = [...messages]
             newMsgs[index] = { ...messages[index], message: decoded }
             setMessages(newMsgs)
@@ -69,8 +58,11 @@ function ChatRoom({ username }) {
     }
 
     const changeRoom = async (val) => {
-        socket.emit('joinRoomClient', { room: val });
-        setCurrentRoom(val);
+        if(val !== currentRoom){
+            socket.emit('joinRoomClient', { room: val });
+            setCurrentRoom(val);
+            setMessages([]);
+        }
     }
 
     return (
@@ -78,13 +70,15 @@ function ChatRoom({ username }) {
             <div className='side-nav'>
                 {rooms.map((value, idx) => {
                     return (
-                        <p key={idx} className='userList' onClick={() => changeRoom(value)}>{value}</p>
+                        <p key={idx} style={{backgroundColor : currentRoom === value ? '#560101':''}} className='userList' onClick={() => changeRoom(value)}>{value}</p>
                     )
                 })}
 
             </div>
             <div className='message-section'>
-                {messages.map((value, index) => {
+                {currentRoom == null ? <h1>SELECT A ROOM</h1>:<h1>{currentRoom}</h1>}
+                {
+                messages.map((value, index) => {
                     return (
                         <div key={index} className='message-box' onClick={() => verify(index)}>
                             <p>{`${value.name}: `}</p>

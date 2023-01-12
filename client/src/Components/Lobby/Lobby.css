@@ -15,24 +15,35 @@
     border: none;
     color: black;
     background-color: white;
-    border-bottom: greenyellow 2px solid;
     width: 100%;
-    padding-left: 10px;
+    padding: 10px;
     font-size: 20px;
+    margin-top: 10px;
 }
 
 .user-name:focus{
     outline: none;
-    border: none;
+    border-bottom: greenyellow 2px solid;
 }
 
 .lobby-button{
     border: none;
     padding: 15px;
-    width: auto;
+    width: 100%;
     color: white;
     background-color: greenyellow;
     justify-content: center; 
+    margin-top: 10px;
+}
+
+.lobby-button:hover{
+    border: none;
+    padding: 15px;
+    width: 100%;
+    color: white;
+    background-color: rgba(172, 255, 47, 0.855);
+    justify-content: center; 
+    margin-top: 10px;
 }
 
 tr{
